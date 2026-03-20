@@ -1,5 +1,7 @@
+import { ChatPage } from "./features/chat/ChatPage";
+
 const App = () => {
-  return <div>Frontend chat challenge</div>;
+  return <ChatPage />;
 };
 
 export default App;
