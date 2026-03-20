@@ -2,13 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, SyntheticEvent } from "react";
 import { Button } from "./Button";
 
-interface Props {
+type MessageInputProps = {
   onSendMessage: (text: string) => Promise<void>;
   isSending: boolean;
-}
+};
 
-export const MessageInput = ({ onSendMessage, isSending }: Props) => {
-  const [value, setValue] = useState("");
+export const MessageInput = ({
+  onSendMessage,
+  isSending,
+}: MessageInputProps) => {
+  const [value, setValue] = useState<string>("");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const isSubmitDisabled = isSending || !value.trim();
 

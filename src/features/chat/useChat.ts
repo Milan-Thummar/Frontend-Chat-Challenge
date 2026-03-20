@@ -13,36 +13,55 @@ const DEFAULT_ERROR_MESSAGES = {
   poll: "Failed to fetch new messages.",
 };
 
-const byCreatedAt = (a: Message, b: Message) =>
+type UseChatOptions = {
+  currentUser: string;
+};
+
+type UseChatReturn = {
+  currentUser: string;
+  messages: Message[];
+  error: string | null;
+  isInitialLoading: boolean;
+  isLoadingOlder: boolean;
+  isPollingNew: boolean;
+  isSending: boolean;
+  hasOlderMessages: boolean;
+  loadOlderMessages: () => Promise<void>;
+  sendMessage: (text: string) => Promise<void>;
+  retryInitialLoad: () => Promise<void>;
+};
+
+const byCreatedAt = (a: Message, b: Message): number =>
   new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 
-const getMessageKey = (message: Message) =>
+const getMessageKey = (message: Message): string =>
   message._id ?? `${message.author}-${message.message}-${message.createdAt}`;
 
-const mergeMessages = (messages: Message[]) =>
+const mergeMessages = (messages: Message[]): Message[] =>
   Array.from(
     new Map(
-      messages.map((message) => [getMessageKey(message), message])
+      messages.map((message) => [getMessageKey(message), message] as const)
     ).values()
   ).sort(byCreatedAt);
 
-const getErrorMessage = (error: unknown, fallback: string) =>
+const getErrorMessage = (error: unknown, fallback: string): string =>
   error instanceof Error ? error.message : fallback;
 
-export const useChat = ({ currentUser }: { currentUser: string }) => {
+export const useChat = ({ currentUser }: UseChatOptions): UseChatReturn => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [isLoadingOlder, setIsLoadingOlder] = useState(false);
-  const [isPollingNew, setIsPollingNew] = useState(false);
-  const [isSending, setIsSending] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
+  const [isLoadingOlder, setIsLoadingOlder] = useState<boolean>(false);
+  const [isPollingNew, setIsPollingNew] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasOlderMessages, setHasOlderMessages] = useState(true);
+  const [hasOlderMessages, setHasOlderMessages] = useState<boolean>(true);
 
-  const isPollingRef = useRef(false);
+  const isPollingRef = useRef<boolean>(false);
   const latestMessageDateRef = useRef<string | null>(null);
 
-  const oldestMessageDate = messages[0]?.createdAt ?? null;
-  const latestMessageDate = messages[messages.length - 1]?.createdAt ?? null;
+  const oldestMessageDate: string | null = messages[0]?.createdAt ?? null;
+  const latestMessageDate: string | null =
+    messages[messages.length - 1]?.createdAt ?? null;
 
   useEffect(() => {
     latestMessageDateRef.current = latestMessageDate;

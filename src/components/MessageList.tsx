@@ -20,7 +20,7 @@ export const MessageList = ({
   hasOlderMessages,
   onLoadOlder,
 }: MessageListProps) => {
-  const previousLengthRef = useRef(0);
+  const previousLengthRef = useRef<number>(0);
 
   useEffect(() => {
     if (!messages.length) return;
