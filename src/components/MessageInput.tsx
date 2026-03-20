@@ -9,7 +9,7 @@ interface Props {
 
 export const MessageInput = ({ onSendMessage, isSending }: Props) => {
   const [value, setValue] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const isSubmitDisabled = isSending || !value.trim();
 
   useEffect(() => {
@@ -30,10 +30,11 @@ export const MessageInput = ({ onSendMessage, isSending }: Props) => {
     await submitMessage();
   };
 
-  const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") return;
-    e.preventDefault();
-    await submitMessage();
+  const handleKeyDown = async (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      await submitMessage();
+    }
   };
 
   return (
@@ -45,11 +46,10 @@ export const MessageInput = ({ onSendMessage, isSending }: Props) => {
         Message
       </label>
 
-      <input
+      <textarea
         ref={inputRef}
         id="message"
-        className="h-14 w-full rounded-md border-[3px] border-input-border bg-white px-3 py-4 text-body-text outline-none placeholder:text-muted focus:border-primary-dark"
-        type="text"
+        className="min-h-14 w-full resize-none rounded-md border-[3px] border-input-border bg-white px-3 py-4 text-body-text outline-none placeholder:text-muted focus:border-primary-dark"
         placeholder="Message"
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -57,6 +57,7 @@ export const MessageInput = ({ onSendMessage, isSending }: Props) => {
         disabled={isSending}
         autoComplete="off"
         aria-label="Message input"
+        rows={1}
       />
 
       <Button

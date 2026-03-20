@@ -30,7 +30,7 @@ export const Button = ({
       {...props}
       disabled={isDisabled}
       className={classNames(
-        "h-14 cursor-pointer rounded-md px-4 text-base font-medium tracking-wide transition-all duration-200 ease-in-out sm:px-6",
+        "h-15 cursor-pointer rounded-md px-4 text-base font-medium tracking-wide transition-all duration-200 ease-in-out sm:px-6",
         VARIANT_STYLES[variant],
         "disabled:cursor-not-allowed disabled:opacity-75",
         className
