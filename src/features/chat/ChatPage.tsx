@@ -1,5 +1,5 @@
 import { MessageInput } from "../../components/MessageInput";
-import { MessageItem } from "../../components/MessageItem";
+import { MessageList } from "../../components/MessageList";
 import type { Message } from "../../types/message";
 
 const CURRENT_USER = "Milan";
@@ -26,25 +26,14 @@ export const ChatPage = () => {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      <section className="mx-auto flex min-h-screen w-full max-w-160 flex-col justify-end p-6">
-        <div className="mb-4 space-y-3">
-          {mockMessages.map((message) => {
-            const isOwnMessage = message.author === CURRENT_USER;
+      <section className="mx-auto flex min-h-screen w-full max-w-160 flex-col p-6">
+        <MessageList
+          messages={mockMessages}
+          currentUser={CURRENT_USER}
+          isInitialLoading={false}
+        />
 
-            return (
-              <div
-                key={message._id}
-                className={
-                  isOwnMessage ? "flex justify-end" : "flex justify-start"
-                }
-              >
-                <MessageItem message={message} isOwnMessage={isOwnMessage} />
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="rounded-xl bg-white p-4 shadow-sm">
+        <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
           <MessageInput onSendMessage={handleSendMessage} isSending={false} />
         </div>
       </section>
