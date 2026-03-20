@@ -12,7 +12,10 @@ export const ChatPage = () => {
     messages,
     error,
     isInitialLoading,
+    isLoadingOlder,
     isSending,
+    hasOlderMessages,
+    loadOlderMessages,
     sendMessage,
     retryInitialLoad,
   } = useChat({ currentUser: CURRENT_USER });
@@ -68,6 +71,9 @@ export const ChatPage = () => {
               messages={messages}
               currentUser={currentUser}
               isInitialLoading={isInitialLoading}
+              isLoadingOlder={isLoadingOlder}
+              hasOlderMessages={hasOlderMessages}
+              onLoadOlder={loadOlderMessages}
             />
           </>
         )}
